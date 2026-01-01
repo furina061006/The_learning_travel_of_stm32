@@ -1,0 +1,11 @@
+# 忽略编译输出
+Objects/
+Listings/
+*.crf
+*.d
+*.o
+*.axf
+*.hex
+*.bin
+*.map
+*.dep
