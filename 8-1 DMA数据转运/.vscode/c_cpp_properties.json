@@ -1,0 +1,30 @@
+{
+    "configurations": [
+        {
+            "name": "STM32F103C8T6",
+            "includePath": [
+                "${workspaceFolder}/Hardware",
+                "${workspaceFolder}/Library",
+                "${workspaceFolder}/System",
+                "${workspaceFolder}/User",
+                "${workspaceFolder}/Start",
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/include/rw"
+            ],
+            "defines": [
+                "STM32F10X_MD",
+                "USE_STDPERIPH_DRIVER",
+                "__GNUC__",
+                "ARM",
+                "DEBUG",
+                "HSE_VALUE=8000000",
+                "HSI_VALUE=8000000"
+            ],
+            "compilerPath":"",
+            "cStandard": "c99",
+            "cppStandard": "c++11",
+            "intelliSenseMode": "gcc-arm"
+        }
+    ],
+    "version": 4
+}
