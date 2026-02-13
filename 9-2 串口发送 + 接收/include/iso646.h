@@ -11,7 +11,7 @@
 
 #ifndef __iso646_h
 #define __iso646_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
 #ifndef __cplusplus
 #define and    &&

@@ -16,7 +16,7 @@
 
 #ifndef ARMDSP_DSPFNS_H
 #define ARMDSP_DSPFNS_H
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
 #ifdef __cplusplus
 #define __STDC_LIMIT_MACROS 1
@@ -44,13 +44,13 @@
 #endif
 
 #ifdef __cplusplus
-#define __ARM_INTRINSIC __forceinline
+#define __ARM_INTRINSIC __attribute__((always_inline))
 #elif defined __GNUC__ || defined _USE_STATIC_INLINE
-#define __ARM_INTRINSIC static __forceinline
+#define __ARM_INTRINSIC static __attribute__((always_inline))
 #elif (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__)
-#define __ARM_INTRINSIC __forceinline
+#define __ARM_INTRINSIC __attribute__((always_inline))
 #else
-#define __ARM_INTRINSIC __forceinline
+#define __ARM_INTRINSIC __attribute__((always_inline))
 #endif
 
 /* Define this to 1 if you do not need add() etc. to set the saturation flag */

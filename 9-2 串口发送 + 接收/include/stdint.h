@@ -9,7 +9,7 @@
 
 #ifndef __stdint_h
 #define __stdint_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
   #ifdef __INT64_TYPE__
     /* armclang predefines '__INT64_TYPE__' and '__INT64_C_SUFFIX__' */
@@ -107,7 +107,7 @@ typedef   signed     __LONGLONG intmax_t;
 typedef unsigned     __LONGLONG uintmax_t;
 
 
-#if !defined(__cplusplus) || defined(__STDC_LIMIT_MACROS)
+#if !defined(__cplusplus) || defined(__USE_C99_ALL) || 201103L <= __cplusplus || defined(__STDC_LIMIT_MACROS)
 
     /* 7.18.2.1 */
 
@@ -245,7 +245,7 @@ typedef unsigned     __LONGLONG uintmax_t;
 
 #endif /* __STDC_LIMIT_MACROS */
 
-#if !defined(__cplusplus) || defined(__STDC_CONSTANT_MACROS)
+#if !defined(__cplusplus) || defined(__USE_C99_ALL) || 201103L <= __cplusplus || defined(__STDC_CONSTANT_MACROS)
 
     /* 7.18.4.1 macros for minimum-width integer constants */
 #define INT8_C(x)   (x)

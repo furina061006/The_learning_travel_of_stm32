@@ -9,7 +9,7 @@
 
 #ifndef __fenv_h
 #define __fenv_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
 /*
  * Depending on compiler version __int64 or __INT64_TYPE__ should be defined.
@@ -23,7 +23,7 @@
 #endif
 
 #ifndef _ARMABI
-#  define _ARMABI __declspec(__nothrow)
+#  define _ARMABI __attribute__((nothrow))
 #endif
 
 #ifdef __cplusplus
@@ -34,8 +34,10 @@ extern "C" {
  * Types.
  */
 
+#if __ARMCOMPILER_VERSION < 6000000
 #pragma push
 #pragma anon_unions
+#endif
 
 typedef unsigned int __ieee_edata_t;     /* exception flags passed to traps */
 
@@ -85,24 +87,24 @@ typedef union {
     struct { int __word1, __word2; } __str;
 } __ieee_value_t;                        /* in/out values passed to traps */
 
-#ifndef __TARGET_ARCH_AARCH64
+#if (!defined(__ARM_64BIT_STATE) && !defined(__TARGET_ARCH_AARCH64))
 
 typedef __attribute__((__pcs__("aapcs"))) __ieee_value_t (*__ieee_handler_t) (__ieee_value_t, __ieee_value_t,
                                                                           __ieee_edata_t);
 
-#endif /* __TARGET_ARCH_AARCH64 */
+#endif /* !__ARM_64BIT_STATE && !__TARGET_ARCH_AARCH64 */
 
 typedef struct {
 #ifdef __STRICT_ANSI__
     unsigned __statusword;
-#ifndef __TARGET_ARCH_AARCH64
+#if (!defined(__ARM_64BIT_STATE) && !defined(__TARGET_ARCH_AARCH64))
     __ieee_handler_t __invalid_handler;
     __ieee_handler_t __divbyzero_handler;
     __ieee_handler_t __overflow_handler;
     __ieee_handler_t __underflow_handler;
     __ieee_handler_t __inexact_handler;
     /* does not include inputdenormal */
-#endif /* __TARGET_ARCH_AARCH64 */
+#endif /* !__ARM_64BIT_STATE && !__TARGET_ARCH_AARCH64 */
 #else
     union {
         unsigned __statusword;
@@ -110,7 +112,7 @@ typedef struct {
         unsigned statusword;
 #endif
     };
-#ifndef __TARGET_ARCH_AARCH64
+#if (!defined(__ARM_64BIT_STATE) && !defined(__TARGET_ARCH_AARCH64))
     union {
         __ieee_handler_t __invalid_handler;
 #ifndef invalid_handler
@@ -142,12 +144,14 @@ typedef struct {
 #endif
     };
     /* does not include inputdenormal */
-#endif /* __TARGET_ARCH_AARCH64 */
+#endif /* !__ARM_64BIT_STATE && !__TARGET_ARCH_AARCH64 */
 #endif
 } fenv_t, fexcept_t;
 
 
+#if __ARMCOMPILER_VERSION < 6000000
 #pragma pop /* restore setting of anon_unions */
+#endif
 
 /*
  * Exception flags.

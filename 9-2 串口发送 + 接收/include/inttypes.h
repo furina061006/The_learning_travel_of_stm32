@@ -11,14 +11,14 @@
 
 #ifndef __inttypes_h
 #define __inttypes_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
-#define _ARMABI __declspec(__nothrow)
-#define _ARMABI_PURE __declspec(__nothrow) __attribute__((const))
+#define _ARMABI __attribute__((nothrow))
+#define _ARMABI_PURE __attribute__((nothrow)) __attribute__((const))
 
 #include <stdint.h>
 
-#if !defined(__cplusplus) || defined(__STDC_FORMAT_MACROS) || 201103L <= __cplusplus
+#if !defined(__cplusplus) || defined(__USE_C99_ALL) || defined(__STDC_FORMAT_MACROS) || 201103L <= __cplusplus
 
 #ifdef __LP64__
   #define __PRISCN64 "l" /* 'int64_t' is 'long' */

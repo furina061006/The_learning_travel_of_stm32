@@ -11,9 +11,9 @@
 
 #ifndef __locale_h
 #define __locale_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
-#define _ARMABI __declspec(__nothrow)
+#define _ARMABI __attribute__((nothrow))
 
   #ifndef __LOCALE_DECLS
   #define __LOCALE_DECLS
@@ -107,6 +107,10 @@ extern _ARMABI char *_setlocale_r(char * /*buffer*/, int /*category*/, const cha
    * only the output buffer which is made safe by using these.
    */
 
+#if __ARMCOMPILER_VERSION < 6000000
+#pragma push
+#pragma anon_unions
+#endif
 struct lconv {
   char *decimal_point;
        /* The decimal point character used to format non-monetary quantities */
@@ -186,7 +190,56 @@ struct lconv {
    * 3          The sign string immediately preceeds the currency_symbol.
    * 4          The sign string immediately succeeds the currency_symbol.
    */
+
+    /* The following are new fields introduced in the C99 standard.
+     * 
+     * In order to not break compatibility with the C89/90 standard, the fields
+     * are conditionally included. However, to keep the struct size the same
+     * between objects compiled for different standards, we unconditionally
+     * define an __XX member just to reserve the space (aliased). Note that
+     * __XX symbols should not clash with user defined symbols as such names are
+     * reserved by the standard.
+     */
+    union {
+        char __int_p_cs_precedes;
+#if !defined(int_p_cs_precedes) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
+        char int_p_cs_precedes;
+#endif
+    };
+    union {
+        char __int_n_cs_precedes;
+#if !defined(int_n_cs_precedes) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
+        char int_n_cs_precedes;
+#endif
+    };
+    union {
+        char __int_p_sep_by_space;
+#if !defined(int_p_sep_by_space) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
+        char int_p_sep_by_space;
+#endif
+    };
+    union {
+        char __int_n_sep_by_space;
+#if !defined(int_n_sep_by_space) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
+        char int_n_sep_by_space;
+#endif
+    };
+    union {
+        char __int_p_sign_posn;
+#if !defined(int_p_sign_posn) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
+        char int_p_sign_posn;
+#endif
+    };
+    union {
+        char __int_n_sign_posn;
+#if !defined(int_n_sign_posn) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
+        char int_n_sign_posn;
+#endif
+    };
 };
+#if __ARMCOMPILER_VERSION < 6000000
+#pragma pop /* restore setting of anon_unions */
+#endif
 
 extern _ARMABI struct lconv *localeconv(void);
   /*
@@ -218,8 +271,10 @@ extern _ARMABI void _get_lconv(struct lconv * /*result*/) __attribute__((__nonnu
 /*
  * EABI-defined version of the lconv structure.
  */
+#if __ARMCOMPILER_VERSION < 6000000
 #pragma push
 #pragma anon_unions
+#endif
 struct __aeabi_lconv {
     char *decimal_point;
     char *thousands_sep;
@@ -278,7 +333,9 @@ struct __aeabi_lconv {
 #endif
     };
 };
+#if __ARMCOMPILER_VERSION < 6000000
 #pragma pop /* restore setting of anon_unions */
+#endif
 
 extern _ARMABI struct __aeabi_lconv *__aeabi_localeconv(void);
 extern _ARMABI void _get_aeabi_lconv(struct __aeabi_lconv * /*result*/) __attribute__((__nonnull__(1)));

@@ -10,7 +10,7 @@
 
 #ifndef __stdarg_h
 #define __stdarg_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
   #ifndef __STDARG_DECLS
   #define __STDARG_DECLS
@@ -45,7 +45,7 @@
   #define va_copy(dest, src)  __builtin_va_copy(dest, src)
   #endif
 #else
-  #ifdef __TARGET_ARCH_AARCH64
+  #if (defined(__ARM_64BIT_STATE) || defined(__TARGET_ARCH_AARCH64))
     typedef struct __va_list {
       void *__stack;
       void *__gr_top;

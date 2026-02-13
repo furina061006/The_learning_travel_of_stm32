@@ -25,7 +25,7 @@
 
 #ifndef __math_h
 #define __math_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
 #if defined(__clang__) || (defined(__ARMCC_VERSION) && !defined(__STRICT_ANSI__))
   /* armclang and non-strict armcc allow 'long long' in system headers */
@@ -45,14 +45,24 @@
   #endif
 #endif
 
-#define _ARMABI __declspec(__nothrow)
-#ifdef __TARGET_ARCH_AARCH64
-# define _ARMABI_SOFTFP __declspec(__nothrow)
+#if defined(_ARM_OVERRIDE_PCS)
+#define _ARMABI __attribute__((nothrow)) _ARM_OVERRIDE_PCS
 #else
-# define _ARMABI_SOFTFP __declspec(__nothrow) __attribute__((__pcs__("aapcs")))
+#define _ARMABI __attribute__((nothrow))
+#endif
+#if (defined(__ARM_64BIT_STATE) || defined(__TARGET_ARCH_AARCH64))
+# define _ARMABI_SOFTFP __attribute__((nothrow))
+#else
+# define _ARMABI_SOFTFP __attribute__((nothrow)) __attribute__((__pcs__("aapcs")))
+#endif
+#if !defined(__TARGET_ARCH_AARCH64)
 # define __HAVE_LONGDOUBLE 1
 #endif
-#define _ARMABI_PURE __declspec(__nothrow) __attribute__((const))
+#if defined(_ARM_OVERRIDE_PCS)
+#define _ARMABI_PURE __attribute__((nothrow)) __attribute__((const)) _ARM_OVERRIDE_PCS
+#else
+#define _ARMABI_PURE __attribute__((nothrow)) __attribute__((const))
+#endif
 #ifdef __FP_FENV_EXCEPTIONS
 # define _ARMABI_FPEXCEPT _ARMABI
 #else
@@ -73,7 +83,7 @@
 #define _ARMABI_INLINE_DEF __inline
 #endif
 
-#ifdef __TARGET_ARCH_AARCH64
+#if (defined(__ARM_64BIT_STATE) || defined(__TARGET_ARCH_AARCH64))
 #  define _SOFTFP
 #else
 #  define _SOFTFP __attribute__((__pcs__("aapcs")))
@@ -856,8 +866,8 @@ _ARMABI_INLINE _ARMABI_FPEXCEPT long double nansl(const char *__t) \
 extern _ARMABI_FPEXCEPT double nearbyint(double /*x*/);
 extern _ARMABI_FPEXCEPT float nearbyintf(float /*x*/);
 _ARMDEFLD1(nearbyint);
-extern  double remquo(double /*x*/, double /*y*/, int */*quo*/);
-extern  float remquof(float /*x*/, float /*y*/, int */*quo*/);
+extern _ARMABI double remquo(double /*x*/, double /*y*/, int */*quo*/);
+extern _ARMABI float remquof(float /*x*/, float /*y*/, int */*quo*/);
 #ifdef __HAVE_LONGDOUBLE
 _ARMABI_INLINE long double remquol(long double __x, long double __y, int *__q) \
     { return (long double)remquo((double)__x, (double)__y, __q); }

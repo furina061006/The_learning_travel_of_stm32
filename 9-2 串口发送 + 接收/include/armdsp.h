@@ -21,7 +21,7 @@
 
 #ifndef ARMDSP_ARMDSP_H
 #define ARMDSP_ARMDSP_H
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
 #ifndef ARMDSP_WORD32_DEFINED
 #define ARMDSP_WORD32_DEFINED
@@ -46,9 +46,13 @@ extern "C" {
 __inline Word32 qadd(Word32 x, Word32 y)
 {
     Word32 ret;
+#if __ARMCOMPILER_VERSION > 6000000
+    __asm ("qadd %0, %1, %2": "=r" (ret) : "r" (x), "r" (y));
+#else
     __asm {
         qadd ret, x, y;
     }
+#endif
     return ret;
 }
 
@@ -58,9 +62,13 @@ __inline Word32 qadd(Word32 x, Word32 y)
 __inline Word32 qsub(Word32 x, Word32 y)
 {
     Word32 ret;
+#if __ARMCOMPILER_VERSION > 6000000
+    __asm ("qsub %0, %1, %2": "=r" (ret) : "r" (x), "r" (y));
+#else
     __asm {
         qsub ret, x, y;
     }
+#endif
     return ret;
 }
 
@@ -71,9 +79,13 @@ __inline Word32 qsub(Word32 x, Word32 y)
 __inline Word32 qdadd(Word32 x, Word32 y)
 {
     Word32 ret;
+#if __ARMCOMPILER_VERSION > 6000000
+    __asm ("qdadd %0, %1, %2": "=r" (ret) : "r" (x), "r" (y));
+#else
     __asm {
         qdadd ret, x, y;
     }
+#endif
     return ret;
 }
 
@@ -84,9 +96,13 @@ __inline Word32 qdadd(Word32 x, Word32 y)
 __inline Word32 qdsub(Word32 x, Word32 y)
 {
     Word32 ret;
+ #if __ARMCOMPILER_VERSION > 6000000
+   __asm ("qdsub %0, %1, %2": "=r" (ret) : "r" (x), "r" (y));
+#else
     __asm {
         qdsub ret, x, y;
     }
+#endif
     return ret;
 }
 
@@ -100,9 +116,13 @@ __inline Word32 qdsub(Word32 x, Word32 y)
 __inline Word32 smulbb(Word32 x, Word32 y)
 {
     Word32 ret;
+#if __ARMCOMPILER_VERSION > 6000000
+    __asm ("smulbb %0, %1, %2": "=r" (ret) : "r" (x), "r" (y));
+#else
     __asm {
         smulbb ret, x, y;
     }
+#endif
     return ret;
 }
 
@@ -110,9 +130,13 @@ __inline Word32 smulbb(Word32 x, Word32 y)
 __inline Word32 smulbt(Word32 x, Word32 y)
 {
     Word32 ret;
+#if __ARMCOMPILER_VERSION > 6000000
+    __asm ("smulbt %0, %1, %2": "=r" (ret) : "r" (x), "r" (y));
+#else
     __asm {
         smulbt ret, x, y;
     }
+#endif
     return ret;
 }
 
@@ -120,9 +144,13 @@ __inline Word32 smulbt(Word32 x, Word32 y)
 __inline Word32 smultb(Word32 x, Word32 y)
 {
     Word32 ret;
+#if __ARMCOMPILER_VERSION > 6000000
+    __asm ("smultb %0, %1, %2": "=r" (ret) : "r" (x), "r" (y));
+#else
     __asm {
         smultb ret, x, y;
     }
+#endif
     return ret;
 }
 
@@ -130,9 +158,13 @@ __inline Word32 smultb(Word32 x, Word32 y)
 __inline Word32 smultt(Word32 x, Word32 y)
 {
     Word32 ret;
+#if __ARMCOMPILER_VERSION > 6000000
+    __asm ("smultt %0, %1, %2": "=r" (ret) : "r" (x), "r" (y));
+#else
     __asm {
         smultt ret, x, y;
     }
+#endif
     return ret;
 }
 
@@ -147,9 +179,13 @@ __inline Word32 smultt(Word32 x, Word32 y)
 __inline Word32 smlabb(Word32 x, Word32 y, Word32 a)
 {
     Word32 ret;
+#if __ARMCOMPILER_VERSION > 6000000
+    __asm ("smlabb %0, %1, %2, %3": "=r" (ret) : "r" (x), "r" (y), "r" (a));
+#else
     __asm {
         smlabb ret, x, y, a;
     }
+#endif
     return ret;
 }
 
@@ -157,9 +193,13 @@ __inline Word32 smlabb(Word32 x, Word32 y, Word32 a)
 __inline Word32 smlabt(Word32 x, Word32 y, Word32 a)
 {
     Word32 ret;
+#if __ARMCOMPILER_VERSION > 6000000
+    __asm ("smlabt %0, %1, %2, %3": "=r" (ret) : "r" (x), "r" (y), "r" (a));
+#else
     __asm {
         smlabt ret, x, y, a;
     }
+#endif
     return ret;
 }
 
@@ -167,9 +207,13 @@ __inline Word32 smlabt(Word32 x, Word32 y, Word32 a)
 __inline Word32 smlatb(Word32 x, Word32 y, Word32 a)
 {
     Word32 ret;
+#if __ARMCOMPILER_VERSION > 6000000
+    __asm ("smlatb %0, %1, %2, %3": "=r" (ret) : "r" (x), "r" (y), "r" (a));
+#else
     __asm {
         smlatb ret, x, y, a;
     }
+#endif
     return ret;
 }
 
@@ -177,9 +221,13 @@ __inline Word32 smlatb(Word32 x, Word32 y, Word32 a)
 __inline Word32 smlatt(Word32 x, Word32 y, Word32 a)
 {
     Word32 ret;
+#if __ARMCOMPILER_VERSION > 6000000
+    __asm ("smlatt %0, %1, %2, %3": "=r" (ret) : "r" (x), "r" (y), "r" (a));
+#else
     __asm {
         smlatt ret, x, y, a;
     }
+#endif
     return ret;
 }
 
@@ -197,33 +245,61 @@ __inline Word32 smlatt(Word32 x, Word32 y, Word32 a)
 /* smlalbb - multiply bottom half of x and bottom half of y */
 __inline void smlalbb(Word32 *lo, Word32 *hi, Word32 x, Word32 y)
 {
+#if __ARMCOMPILER_VERSION > 6000000
+    Word32 reglo = *lo, reghi = *hi;
+    __asm ("smlalbb %0, %1, %2, %3": "+r" (reglo), "+r" (reghi)
+                                   : "r" (x), "r" (y));
+    *lo = reglo; *hi = reghi;
+#else
     __asm {
         smlalbb *lo, *hi, x, y;
     }
+#endif
 }
 
 /* smlalbt - multiply bottom half of x and top half of y */
 __inline void smlalbt(Word32 *lo, Word32 *hi, Word32 x, Word32 y)
 {
+#if __ARMCOMPILER_VERSION > 6000000
+    Word32 reglo = *lo, reghi = *hi;
+    __asm ("smlalbt %0, %1, %2, %3": "+r" (reglo), "+r" (reghi)
+                                   : "r" (x), "r" (y));
+    *lo = reglo; *hi = reghi;
+#else
     __asm {
         smlalbt *lo, *hi, x, y;
     }
+#endif
 }
 
 /* smlaltb - multiply top half of x and bottom half of y */
 __inline void smlaltb(Word32 *lo, Word32 *hi, Word32 x, Word32 y)
 {
+#if __ARMCOMPILER_VERSION > 6000000
+    Word32 reglo = *lo, reghi = *hi;
+    __asm ("smlaltb %0, %1, %2, %3": "+r" (reglo), "+r" (reghi)
+                                   : "r" (x), "r" (y));
+    *lo = reglo; *hi = reghi;
+#else
     __asm {
         smlaltb *lo, *hi, x, y;
     }
+#endif
 }
 
 /* smlaltt - multiply top half of x and top half of y */
 __inline void smlaltt(Word32 *lo, Word32 *hi, Word32 x, Word32 y)
 {
+#if __ARMCOMPILER_VERSION > 6000000
+    Word32 reglo = *lo, reghi = *hi;
+    __asm ("smlaltt %0, %1, %2, %3": "+r" (reglo), "+r" (reghi)
+                                   : "r" (x), "r" (y));
+    *lo = reglo; *hi = reghi;
+#else
     __asm {
         smlaltt *lo, *hi, x, y;
     }
+#endif
 }
 
 /*
@@ -237,9 +313,13 @@ __inline void smlaltt(Word32 *lo, Word32 *hi, Word32 x, Word32 y)
 __inline Word32 smulwb(Word32 x, Word32 y)
 {
     Word32 ret;
+#if __ARMCOMPILER_VERSION > 6000000
+    __asm ("smulwb %0, %1, %2": "=r" (ret) : "r" (x), "r" (y));
+#else
     __asm {
         smulwb ret, x, y;
     }
+#endif
     return ret;
 }
 
@@ -247,9 +327,13 @@ __inline Word32 smulwb(Word32 x, Word32 y)
 __inline Word32 smulwt(Word32 x, Word32 y)
 {
     Word32 ret;
+#if __ARMCOMPILER_VERSION > 6000000
+    __asm ("smulwt %0, %1, %2": "=r" (ret) : "r" (x), "r" (y));
+#else
     __asm {
         smulwt ret, x, y;
     }
+#endif
     return ret;
 }
 
@@ -264,9 +348,13 @@ __inline Word32 smulwt(Word32 x, Word32 y)
 __inline Word32 smlawb(Word32 x, Word32 y, Word32 a)
 {
     Word32 ret;
+#if __ARMCOMPILER_VERSION > 6000000
+    __asm ("smlawb %0, %1, %2, %3": "=r" (ret) : "r" (x), "r" (y), "r" (a));
+#else
     __asm {
         smlawb ret, x, y, a;
     }
+#endif
     return ret;
 }
 
@@ -274,9 +362,13 @@ __inline Word32 smlawb(Word32 x, Word32 y, Word32 a)
 __inline Word32 smlawt(Word32 x, Word32 y, Word32 a)
 {
     Word32 ret;
+#if __ARMCOMPILER_VERSION > 6000000
+    __asm ("smlawt %0, %1, %2, %3": "=r" (ret) : "r" (x), "r" (y), "r" (a));
+#else
     __asm {
         smlawt ret, x, y, a;
     }
+#endif
     return ret;
 }
 

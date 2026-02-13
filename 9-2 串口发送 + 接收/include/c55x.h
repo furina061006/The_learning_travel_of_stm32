@@ -9,7 +9,7 @@
 
 #ifndef __arm_c55x_h
 #define __arm_c55x_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
 #ifdef __cplusplus
 #define __STDC_LIMIT_MACROS 1
@@ -17,19 +17,23 @@
 #include <stdint.h>
 
 #ifdef __cplusplus
-#define __ARM_INTRINSIC __forceinline
+#define __ARM_INTRINSIC __attribute__((always_inline))
 #elif defined __GNUC__ || defined _USE_STATIC_INLINE
-#define __ARM_INTRINSIC static __forceinline
+#define __ARM_INTRINSIC static __attribute__((always_inline))
 #elif (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__)
-#define __ARM_INTRINSIC __forceinline
+#define __ARM_INTRINSIC __attribute__((always_inline))
 #else
-#define __ARM_INTRINSIC __forceinline
+#define __ARM_INTRINSIC __attribute__((always_inline))
 #endif
 
 /* Define this to 1 if you believe all shift counts are in the range [-255,255] */
 #ifndef __ARM_DSP_SMALL_SHIFTS
 #define __ARM_DSP_SMALL_SHIFTS 0
 #endif
+
+#ifdef __ARM_32BIT_STATE
+/* Include __qadd/__qsub AArch32 intrinsics definition*/
+#include <arm_acle.h>
 
 __ARM_INTRINSIC int32_t _sround  (int32_t src);
 
@@ -49,13 +53,15 @@ __ARM_INTRINSIC int32_t _labss   (int32_t src)                     { return src 
 __ARM_INTRINSIC int16_t _smpy    (int16_t src1, int16_t src2)      { return (int16_t)(__qdbl(src1*src2) >> 16); }
 
 __ARM_INTRINSIC int32_t _lsmpy   (int16_t src1, int16_t src2)      { return __qdbl(src1 * src2);              }
+#endif
 __ARM_INTRINSIC int32_t _lmpy    (int16_t src1, int16_t src2)      { return        src1 * src2;               }
 __ARM_INTRINSIC int32_t _lmpysu  (int16_t src1, uint16_t src2)     { return        src1 * src2;               }
 __ARM_INTRINSIC int32_t _lmpyu   (uint16_t src1, uint16_t src2)    { return        src1 * src2;               }
 __ARM_INTRINSIC int32_t _lsmpyi  (int16_t src1, int16_t src2)      { return        src1 * src2;               }
 __ARM_INTRINSIC int32_t _lsmpysui(int16_t src1, uint16_t src2)     { return        src1 * src2;               }
-__ARM_INTRINSIC int32_t _lsmpysu (int16_t src1, uint16_t src2)     { return __qdbl(src1 * src2);              }
 __ARM_INTRINSIC int32_t _lsmpyui (uint16_t src1, uint16_t src2)    { uint32_t r = src1 * src2; return (r > INT32_MAX) ? INT32_MAX : r; }
+#ifdef __ARM_32BIT_STATE
+__ARM_INTRINSIC int32_t _lsmpysu (int16_t src1, uint16_t src2)     { return __qdbl(src1 * src2);              }
 __ARM_INTRINSIC int32_t _lsmpyu  (uint16_t src1, uint16_t src2)    { return __qdbl(_lsmpyui(src1, src2));     }
 
 __ARM_INTRINSIC int32_t _smpyr   (int16_t src1, int16_t src2)      { return __qdbl(src1*src2 + 0x4000) & 0xFFFF0000; } /* old name */
@@ -79,6 +85,7 @@ __ARM_INTRINSIC int32_t _smassu  (int32_t src1, int16_t src2, uint16_t src3) { r
 
 __ARM_INTRINSIC int32_t _smasr   (int32_t src1, int16_t src2, int16_t src3)  { return _sround(__qsub(src1, __qdbl(src2*src3))); }
 __ARM_INTRINSIC int32_t _a_smasr (int32_t src1, int16_t src2, int16_t src3)  { return _sround(__qsub(src1, __qdbl(src2*src3))); }
+#endif
 
 #if __ARM_DSP_SMALL_SHIFTS
 #define __ARM_normalize_shift(x) (x)
@@ -93,6 +100,7 @@ __ARM_INTRINSIC int32_t _a_smasr (int32_t src1, int16_t src2, int16_t src3)  { r
 #define __ARM_saturated_result(x) __qdbl(INT32_MAX - ((x) >> 31))
   
 
+#ifdef __ARM_32BIT_STATE
 /* Result is saturated */
 __ARM_INTRINSIC int16_t _sshl(int16_t src1, int16_t src2)
 {
@@ -152,6 +160,7 @@ __ARM_INTRINSIC int32_t _lshrs(int32_t src1, int16_t src2)
     return src1 >> src2;
   }
 }
+#endif
 
 /* No saturation is performed */
 __ARM_INTRINSIC int16_t _shl(int16_t src1, int16_t src2)
@@ -175,10 +184,11 @@ __ARM_INTRINSIC int32_t _lshl(int32_t src1, int16_t src2)
   }
 }
 
-__ARM_INTRINSIC int32_t _sround  (int32_t src)                     { return __qadd(src, 0x8000) & 0xFFFF0000; }
 __ARM_INTRINSIC int32_t _round   (int32_t src)                     { return (src + 0x8000) & 0xFFFF0000; }
+#ifdef __ARM_32BIT_STATE
+__ARM_INTRINSIC int32_t _sround  (int32_t src)                     { return __qadd(src, 0x8000) & 0xFFFF0000; }
 __ARM_INTRINSIC int32_t _rnd     (int32_t src)                     { return _sround(src); }
-
+#endif
 __ARM_INTRINSIC int32_t _roundn(int32_t src)
 {
   if ((src & 0x17FFF) != 0) {
@@ -187,6 +197,7 @@ __ARM_INTRINSIC int32_t _roundn(int32_t src)
   return src & 0xFFFF0000;
 }
 
+#ifdef __ARM_32BIT_STATE
 __ARM_INTRINSIC int32_t _sroundn(int32_t src)
 {
   if ((src & 0x17FFF) != 0) {
@@ -194,9 +205,12 @@ __ARM_INTRINSIC int32_t _sroundn(int32_t src)
   }
   return src & 0xFFFF0000;
 }
+#endif
 
+#if __ARMCOMPILER_VERSION < 6000000
 __ARM_INTRINSIC int16_t _norm  (int16_t src)   { return __clz(src ^ ((int32_t)src << 17)) & 15; }
 __ARM_INTRINSIC int16_t _lnorm (int32_t src)   { return __clz(src ^ (src << 1)) & 31; }
+#endif
 
 /* Note that 'long long' in TI C55x is a 40-bit type. */
 __ARM_INTRINSIC int32_t _lsat(int64_t src)
@@ -230,6 +244,7 @@ __ARM_INTRINSIC int16_t divs(int16_t x, int16_t y)
 }
 
 
+#ifdef __ARM_32BIT_STATE
 /* Support function - identical to ETSI shr_r */
 __ARM_INTRINSIC int16_t crshft_r(int16_t x, int16_t shift)
 {
@@ -254,7 +269,9 @@ __ARM_INTRINSIC int16_t crshft_r(int16_t x, int16_t shift)
     return tmp;
 #endif
 }
+#endif
 
+#if __ARMCOMPILER_VERSION < 6000000
 /* Support function - identical to ETSI L_shr_r */
 __ARM_INTRINSIC int32_t L_crshft_r(int32_t x, int16_t shift)
 {
@@ -272,6 +289,7 @@ __ARM_INTRINSIC int32_t L_crshft_r(int32_t x, int16_t shift)
         return x << (-shift);
     return __qdbl((x < 0) ? INT32_MIN : INT32_MAX);
 }
+#endif
 
 #undef __ARM_normalize_shift
 #undef __ARM_saturated_result

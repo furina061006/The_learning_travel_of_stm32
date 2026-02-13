@@ -10,7 +10,7 @@
 
 #ifndef __limits_h
 #define __limits_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
 #define CHAR_BIT 8
     /* max number of bits for smallest object that is not a bit-field (byte) */
@@ -75,7 +75,7 @@ extern const int __aeabi_MB_LEN_MAX;
   #define ULONG_MAX 0xffffffffUL
 #endif
     /* maximum value for an object of type unsigned long int */
-#if !defined(__STRICT_ANSI__) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
+#if !defined(__STRICT_ANSI__) || defined(__USE_C99_ALL) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
   #define LLONG_MIN  (~0x7fffffffffffffffLL)
       /* minimum value for an object of type long long int */
   #define LLONG_MAX    0x7fffffffffffffffLL

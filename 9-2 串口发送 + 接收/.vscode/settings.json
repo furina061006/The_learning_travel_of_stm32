@@ -6,6 +6,7 @@
         "hardware.h": "c",
         "pwm.h": "c",
         "led.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "system.h": "c"
     }
 }

@@ -9,7 +9,7 @@
 
 #ifndef __RT_SYS_H
 #define __RT_SYS_H
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
 #ifdef __cplusplus
 extern "C" {

@@ -8,9 +8,13 @@
 
 #ifndef __wchar_h
 #define __wchar_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
-#define _ARMABI __declspec(__nothrow)
+#if defined(_ARM_OVERRIDE_PCS)
+#define _ARMABI __attribute__((nothrow)) _ARM_OVERRIDE_PCS
+#else
+#define _ARMABI __attribute__((nothrow))
+#endif
 
   #ifndef __WCHAR_DECLS
   #define __WCHAR_DECLS
@@ -126,9 +130,12 @@
      * still easy enough to fit into 32 bits, so I think a single
      * 32-bit integer is enough in here.
      */
-    typedef struct __mbstate_t {
-        unsigned int __state, __state2;
-    } mbstate_t;
+    #if !defined(__mbstate_t_defined)
+      typedef struct __mbstate_t {
+          unsigned int __state, __state2;
+      } mbstate_t;
+      #define __mbstate_t_defined 1
+    #endif
 
     /*
      * `struct tm' must be declared in this header as an incomplete
@@ -233,14 +240,14 @@
     /*
      * Wide-character string-to-number conversions. Parallel to strto*.
      */
-    double wcstod(const wchar_t * /*nptr*/, wchar_t ** /*endptr*/) __attribute__((__nonnull__(1)));
-    float wcstof(const wchar_t * /*nptr*/, wchar_t ** /*endptr*/) __attribute__((__nonnull__(1)));
-    long double wcstold(const wchar_t * /*nptr*/, wchar_t ** /*endptr*/) __attribute__((__nonnull__(1)));
+    _ARMABI double wcstod(const wchar_t * /*nptr*/, wchar_t ** /*endptr*/) __attribute__((__nonnull__(1)));
+    _ARMABI float wcstof(const wchar_t * /*nptr*/, wchar_t ** /*endptr*/) __attribute__((__nonnull__(1)));
+    _ARMABI long double wcstold(const wchar_t * /*nptr*/, wchar_t ** /*endptr*/) __attribute__((__nonnull__(1)));
     long int wcstol(const wchar_t * /*nptr*/, wchar_t **/*endptr*/,
                     int /*base*/) __attribute__((__nonnull__(1)));
     unsigned long int wcstoul(const wchar_t * /*nptr*/,
                               wchar_t ** /*endptr*/, int /*base*/) __attribute__((__nonnull__(1)));
-#if !defined(__STRICT_ANSI__) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
+#if !defined(__STRICT_ANSI__) || defined(__USE_C99_ALL) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
     long long int wcstoll(const wchar_t * __restrict /*nptr*/,
                           wchar_t ** __restrict /*endptr*/, int /*base*/) __attribute__((__nonnull__(1)));
     unsigned long long int wcstoull(const wchar_t * __restrict /*nptr*/,
@@ -412,7 +419,7 @@
       using ::std::wcstold;
       using ::std::wcstol;
       using ::std::wcstoul;
-#if !defined(__STRICT_ANSI__) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
+#if !defined(__STRICT_ANSI__) || defined(__USE_C99_ALL) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
       using ::std::wcstoll;
       using ::std::wcstoull;
 #endif /* !defined(__STRICT_ANSI__) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus) */

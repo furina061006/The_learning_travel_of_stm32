@@ -9,7 +9,7 @@
 
 #ifndef __alloca_h
 #define __alloca_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
   #ifndef __ALLOCA_DECLS
   #define __ALLOCA_DECLS

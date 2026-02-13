@@ -21,10 +21,14 @@
 
 #ifndef __time_h
 #define __time_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
-#define _ARMABI __declspec(__nothrow)
-#define _ARMABI_PURE __declspec(__nothrow) __attribute__((const))
+#if defined(_ARM_OVERRIDE_PCS)
+#define _ARMABI __attribute__((nothrow)) _ARM_OVERRIDE_PCS
+#else
+#define _ARMABI __attribute__((nothrow))
+#endif
+#define _ARMABI_PURE __attribute__((nothrow)) __attribute__((const))
 
   #ifndef __TIME_DECLS
   #define __TIME_DECLS
@@ -78,8 +82,10 @@
 typedef unsigned int clock_t;    /* cpu time type */
 typedef unsigned int time_t;     /* date/time in unix secs past 1-Jan-70 */
 
+#if __ARMCOMPILER_VERSION < 6000000
 #pragma push
 #pragma anon_unions
+#endif
 
 struct tm {
     int tm_sec;   /* seconds after the minute, 0 to 60
@@ -108,7 +114,9 @@ struct tm {
     };
 };
 
+#if __ARMCOMPILER_VERSION < 6000000
 #pragma pop
+#endif
 
    /* struct tm holds the components of a calendar time, called the broken-down
     * time. The value of tm_isdst is positive if Daylight Savings Time is in

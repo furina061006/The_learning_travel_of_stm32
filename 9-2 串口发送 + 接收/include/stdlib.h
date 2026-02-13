@@ -14,7 +14,7 @@
 
 #ifndef __stdlib_h
 #define __stdlib_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
 #if defined(__clang__) || (defined(__ARMCC_VERSION) && !defined(__STRICT_ANSI__))
   /* armclang and non-strict armcc allow 'long long' in system headers */
@@ -24,9 +24,13 @@
   #define __LONGLONG __int64
 #endif
 
-#define _ARMABI __declspec(__nothrow)
-#define _ARMABI_PURE __declspec(__nothrow) __attribute__((const))
-#define _ARMABI_NORETURN __declspec(__nothrow) __declspec(__noreturn)
+#if defined(__clang__)
+#define __value_in_regs __attribute__((value_in_regs))
+#endif
+
+#define _ARMABI __attribute__((nothrow))
+#define _ARMABI_PURE __attribute__((nothrow)) __attribute__((const))
+#define _ARMABI_NORETURN __attribute__((nothrow)) __attribute__((noreturn))
 #define _ARMABI_THROW
 
   #ifndef __STDLIB_DECLS
@@ -632,14 +636,13 @@ extern _ARMABI_PURE lldiv_t lldiv(__LONGLONG /*numer*/, __LONGLONG /*denom*/);
 #endif
 #endif
 
-#if !(__ARM_NO_DEPRECATED_FUNCTIONS)
 /*
  * ARM real-time divide functions for guaranteed performance
  */
-typedef struct __sdiv32by16 { int quot, rem; } __sdiv32by16;
-typedef struct __udiv32by16 { unsigned int quot, rem; } __udiv32by16;
+typedef struct __sdiv32by16 { long quot, rem; } __sdiv32by16;
+typedef struct __udiv32by16 { unsigned long quot, rem; } __udiv32by16;
    /* used int so that values return in separate regs, although 16-bit */
-typedef struct __sdiv64by32 { int rem, quot; } __sdiv64by32;
+typedef struct __sdiv64by32 { long rem, quot; } __sdiv64by32;
 
 __value_in_regs extern _ARMABI_PURE __sdiv32by16 __rt_sdiv32by16(
      int /*numer*/,
@@ -659,7 +662,6 @@ __value_in_regs extern _ARMABI_PURE __sdiv64by32 __rt_sdiv64by32(
    /*
     * Signed divide: (32-bit quot), (32-bit rem) = (64-bit) / (32-bit)
     */
-#endif
 
 /*
  * ARM floating-point mask/status function (for both hardfp and softfp)
@@ -864,14 +866,12 @@ extern _ARMABI int __C_library_version_number(void);
         using ::std::llabs;
         using ::std::lldiv;
       #endif /* !defined(__STRICT_ANSI__) || __USE_C99_STDLIB */
-#if !(__ARM_NO_DEPRECATED_FUNCTIONS)
       using ::std::__sdiv32by16;
       using ::std::__udiv32by16;
       using ::std::__sdiv64by32;
       using ::std::__rt_sdiv32by16;
       using ::std::__rt_udiv32by16;
       using ::std::__rt_sdiv64by32;
-#endif
       using ::std::__fp_status;
       using ::std::mblen;
       using ::std::mbtowc;

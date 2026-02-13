@@ -11,9 +11,9 @@
 
 #ifndef __errno_h
 #define __errno_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
-#define _ARMABI_PURE __declspec(__nothrow) __attribute__((const))
+#define _ARMABI_PURE __attribute__((nothrow)) __attribute__((const))
 
   #ifndef __ERRNO_DECLS
   #define __ERRNO_DECLS

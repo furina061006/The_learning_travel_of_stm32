@@ -9,14 +9,30 @@
 
 #ifndef __RT_MISC_H
 #define __RT_MISC_H
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#if defined(__clang__)
+#define __value_in_regs __attribute((value_in_regs))
+#endif
+
 #include <stddef.h>
 #include <stdint.h>
+
+/*
+ * Define pointer-sized integer and unsigned integer types
+ * for AArch32 and AArch64 architectures.
+ */
+#if (defined(__ARM_64BIT_STATE) || defined(__TARGET_ARCH_AARCH64))
+typedef long __intptr;
+typedef unsigned long __uintptr;
+#else
+typedef int __intptr;
+typedef unsigned __uintptr;
+#endif
 
 /*
  * This will be called during startup if it's defined, in order to
@@ -45,25 +61,17 @@ extern void *__user_libspace(void);
  * use as a heap. It returns argc and argv ready to be passed to
  * main(). (The __argc_argv structure contains four words rather
  * than just two, in case you need to pass anything else to main()
- * such as the Unix envp.  For AArch64 struct __argc_argv is 8 words
- * (4 registers) and explicit padding is used to ensure argc is in w0.)
+ * such as the Unix envp.
  */
 struct __argc_argv {
-#if (defined(__ARM_64BIT_STATE) || defined(__TARGET_ARCH_AARCH64)) && \
-    (defined(__ARM_BIG_ENDIAN) || defined(__BIG_ENDIAN))
-    int padding;
-#endif
-    int argc;
-#if (defined(__ARM_64BIT_STATE) || defined(__TARGET_ARCH_AARCH64)) && \
-    !(defined(__ARM_BIG_ENDIAN) || defined(__BIG_ENDIAN))
-    int padding;
-#endif
+    __intptr argc;
     char **argv;
     void *r2;
     void *r3;
 };
+
 extern __value_in_regs struct __argc_argv
-__rt_lib_init(unsigned /*heapbase*/, unsigned /*heaptop*/);
+__rt_lib_init(__uintptr /*heapbase*/, __uintptr /*heaptop*/);
 
 /*
  * This function is responsible for constructing argc and argv to
@@ -104,14 +112,14 @@ extern void __rt_exit(int /*returncode*/);   /* never returns */
  * taken to be all the space between heap_base and stack_base.
  */
 struct __initial_stackheap {
-    unsigned heap_base;                /* low-address end of initial heap */
-    unsigned stack_base;               /* high-address end of initial stack */
-    unsigned heap_limit;               /* high-address end of initial heap */
-    unsigned stack_limit;              /* low-address end of initial stack */
+    __uintptr heap_base;                /* low-address end of initial heap */
+    __uintptr stack_base;               /* high-address end of initial stack */
+    __uintptr heap_limit;               /* high-address end of initial heap */
+    __uintptr stack_limit;              /* low-address end of initial stack */
 };
 extern __value_in_regs struct __initial_stackheap
-__user_initial_stackheap(unsigned /*R0*/, unsigned /*SP*/,
-                         unsigned /*R2*/, unsigned /*SL*/);
+__user_initial_stackheap(__uintptr /*R0*/, __uintptr /*SP*/,
+                         __uintptr /*R2*/, __uintptr /*SL*/);
 
 /*
  * This can be defined to give bounds on the address space the heap
@@ -135,10 +143,10 @@ __user_heap_extent(uintptr_t /*ignore*/, size_t /*ignore*/);
  * handler) has room to tidy up.
  */
 struct __stack_slop {
-    unsigned always, cleanup;
+    __uintptr always, cleanup;
 };
 extern __value_in_regs struct __stack_slop
-__user_stack_slop(unsigned /*ignore*/, unsigned /*ignore*/);
+__user_stack_slop(__uintptr /*ignore*/, __uintptr /*ignore*/);
 
 /*
  * This can be defined to return extra blocks of memory, separate

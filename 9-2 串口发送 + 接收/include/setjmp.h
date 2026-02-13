@@ -19,7 +19,7 @@
 
 #ifndef __setjmp_h
 #define __setjmp_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
 /*
  * Depending on compiler version __int64 or __INT64_TYPE__ should be defined.
@@ -32,8 +32,8 @@
      through and error out if used. */
 #endif
 
-#define _ARMABI __declspec(__nothrow)
-#define _ARMABI_NORETURN __declspec(__nothrow) __declspec(__noreturn)
+#define _ARMABI __attribute__((nothrow))
+#define _ARMABI_NORETURN __attribute__((nothrow)) __attribute__((noreturn))
 
   #ifndef __SETJMP_DECLS
   #define __SETJMP_DECLS
@@ -51,7 +51,7 @@
 #if _AEABI_PORTABILITY_LEVEL != 0 || (!defined _AEABI_PORTABILITY_LEVEL && __DEFAULT_AEABI_PORTABILITY_LEVEL != 0)
 typedef __int64 jmp_buf[];      /* do not specify size at all */
 #else
-  #ifdef __TARGET_ARCH_AARCH64
+  #if (defined(__ARM_64BIT_STATE) || defined(__TARGET_ARCH_AARCH64))
     typedef __int64 jmp_buf[48];
   #else
     typedef __int64 jmp_buf[20];    /* size as defined in the ATEPCS */

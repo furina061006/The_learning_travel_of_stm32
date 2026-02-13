@@ -9,9 +9,10 @@
 
 #ifndef __RT_HEAP_H
 #define __RT_HEAP_H
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
 #include <stdint.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {

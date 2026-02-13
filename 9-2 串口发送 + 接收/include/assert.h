@@ -27,8 +27,8 @@
 
 #ifndef __assert_h
 #   define __assert_h
-#define _ARMABI_NORETURN __declspec(__nothrow) __declspec(__noreturn)
-#define __ARMCLIB_VERSION 5060034
+#define _ARMABI_NORETURN __attribute__((nothrow)) __attribute__((noreturn))
+#define __ARMCLIB_VERSION 6070001
 #   ifndef __ARM_PROMISE
 #      define __ARM_PROMISE __promise
 #   endif
@@ -51,6 +51,14 @@
 #   undef __promise
 #endif
 
+#ifdef __clang__
+#define __CLANG_IGNORE_ASSUME _Pragma("clang diagnostic push") _Pragma("clang diagnostic ignored \"-Wassume\"")
+#define __CLANG_UNIGNORE_ASSUME _Pragma("clang diagnostic pop")
+#else
+#define __CLANG_IGNORE_ASSUME
+#define __CLANG_UNIGNORE_ASSUME
+#endif
+
 #ifdef NDEBUG
 #   define assert(ignore) ((void)0)
 #   define __promise(e) ((__ARM_PROMISE)((e)?1:0))
@@ -69,7 +77,7 @@
 #undef __promise
 #          define assert(e) ((e) ? (void)0 : __CLIBNS abort(), (__ARM_PROMISE)((e)?1:0))
 #      else
-#          define assert(e) ((e) ? (void)0 : __CLIBNS __aeabi_assert(#e, __FILE__, __LINE__), (__ARM_PROMISE)((e)?1:0))
+#          define assert(e) ((e) ? (void)0 : __CLIBNS __aeabi_assert(#e, __FILE__, __LINE__), __CLANG_IGNORE_ASSUME (__ARM_PROMISE)((e)?1:0) __CLANG_UNIGNORE_ASSUME)
 #      endif
 #      define __promise(e) assert(e)
 #   endif

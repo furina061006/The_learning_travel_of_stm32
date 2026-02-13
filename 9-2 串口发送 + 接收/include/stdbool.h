@@ -9,7 +9,7 @@
 
 #ifndef __bool_true_false_are_defined
 #define __bool_true_false_are_defined 1
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
   #ifndef __cplusplus /* In C++, 'bool', 'true' and 'false' and keywords */
     #define bool _Bool

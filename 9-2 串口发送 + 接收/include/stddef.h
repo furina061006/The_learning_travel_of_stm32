@@ -19,7 +19,7 @@
 
 #ifndef __stddef_h
 #define __stddef_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
   #ifndef __STDDEF_DECLS
   #define __STDDEF_DECLS

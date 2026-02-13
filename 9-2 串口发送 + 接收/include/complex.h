@@ -10,7 +10,7 @@
 #if __STDC_VERSION__ < 199901L && !defined(__GNUC__)
 #  error complex.h requires c99 mode or gnu mode
 #endif
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
 /*
   In order to get the float, double, and long double versions
@@ -65,7 +65,7 @@
 
 /* _ARMABI may have been defined by math.h */
 #  ifndef _ARMABI
-#    define _ARMABI __declspec(__nothrow)
+#    define _ARMABI __attribute__((nothrow))
 #  endif
 
 #endif /* __complex_h_once */

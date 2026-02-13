@@ -8,22 +8,16 @@
                 "${workspaceFolder}/System",
                 "${workspaceFolder}/User",
                 "${workspaceFolder}/Start",
-                "${workspaceFolder}/include",
-                "${workspaceFolder}/include/rw"
+                "${workspaceFolder}/include/**"
             ],
             "defines": [
-                "STM32F10X_MD",
                 "USE_STDPERIPH_DRIVER",
-                "__GNUC__",
-                "ARM",
-                "DEBUG",
-                "HSE_VALUE=8000000",
-                "HSI_VALUE=8000000"
+                "STM32F10X_MD"
             ],
             "compilerPath":"",
             "cStandard": "c99",
             "cppStandard": "c++11",
-            "intelliSenseMode": "gcc-arm"
+            "intelliSenseMode": "windows-gcc-arm"
         }
     ],
     "version": 4

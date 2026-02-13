@@ -18,10 +18,10 @@
 
 #ifndef __ctype_h
 #define __ctype_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
-#define _ARMABI __declspec(__nothrow)
-#define _ARMABI_PURE __declspec(__nothrow) __attribute__((const))
+#define _ARMABI __attribute__((nothrow))
+#define _ARMABI_PURE __attribute__((nothrow)) __attribute__((const))
 
 #ifdef __cplusplus
 #define _ARMABI_INLINE_DEF inline

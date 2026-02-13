@@ -17,7 +17,7 @@
 
 #ifndef __stdio_h
 #define __stdio_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
 /*
  * Depending on compiler version __int64 or __INT64_TYPE__ should be defined.
@@ -31,7 +31,7 @@
 #endif
 
 
-#define _ARMABI __declspec(__nothrow)
+#define _ARMABI __attribute__((nothrow))
 
   #ifndef __STDIO_DECLS
   #define __STDIO_DECLS
@@ -119,11 +119,11 @@ typedef struct __FILE FILE;
 struct __FILE {
     union {
         long __FILE_alignment;
-#ifdef __TARGET_ARCH_AARCH64
+#if (defined(__ARM_64BIT_STATE) || defined(__TARGET_ARCH_AARCH64))
         char __FILE_size[136];
-#else /* __TARGET_ARCH_AARCH64 */
+#else /* __ARM_64BIT_STATE || __TARGET_ARCH_AARCH64 */
         char __FILE_size[84];
-#endif /* __TARGET_ARCH_AARCH64 */
+#endif /* __ARM_64BIT_STATE || __TARGET_ARCH_AARCH64 */
     } __FILE_opaque;
 };
     /*
@@ -435,7 +435,7 @@ extern _ARMABI int _sprintf(char * __restrict /*s*/, const char * __restrict /*f
 extern _ARMABI int __ARM_snprintf(char * __restrict /*s*/, size_t /*n*/,
                      const char * __restrict /*format*/, ...) __attribute__((__nonnull__(3)));
 
-#if !defined(__STRICT_ANSI__) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
+#if !defined(__STRICT_ANSI__) || defined(__USE_C99_ALL) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
 #pragma __printf_args
 extern _ARMABI int snprintf(char * __restrict /*s*/, size_t /*n*/,
                      const char * __restrict /*format*/, ...) __attribute__((__nonnull__(3)));
@@ -546,7 +546,7 @@ extern _ARMABI int _sscanf(const char * __restrict /*s*/,
     * You can use instead of sscanf to improve code size.
     * Returns: as sscanf.
     */
-#if !defined(__STRICT_ANSI__) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
+#if !defined(__STRICT_ANSI__) || defined(__USE_C99_ALL) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
 /* C99 additions */
 extern _ARMABI int vfscanf(FILE * __restrict /*stream*/, const char * __restrict /*format*/, __va_list) __attribute__((__nonnull__(1,2)));
 extern _ARMABI int vscanf(const char * __restrict /*format*/, __va_list) __attribute__((__nonnull__(1)));
@@ -593,7 +593,7 @@ extern _ARMABI int vsprintf(char * __restrict /*s*/,
     */
 extern _ARMABI int __ARM_vsnprintf(char * __restrict /*s*/, size_t /*n*/,
                      const char * __restrict /*format*/, __va_list /*arg*/) __attribute__((__nonnull__(3)));
-#if !defined(__STRICT_ANSI__) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
+#if !defined(__STRICT_ANSI__) || defined(__USE_C99_ALL) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
 extern _ARMABI int vsnprintf(char * __restrict /*s*/, size_t /*n*/,
                      const char * __restrict /*format*/, __va_list /*arg*/) __attribute__((__nonnull__(3)));
    /*
@@ -958,7 +958,7 @@ extern _ARMABI void __use_no_semihosting(void);
     using ::std::_printf;
     using ::std::sprintf;
     using ::std::_sprintf;
-    #if !defined(__STRICT_ANSI__) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
+    #if !defined(__STRICT_ANSI__) || defined(__USE_C99_ALL) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
       using ::std::snprintf;
       using ::std::vsnprintf;
       using ::std::vfscanf;

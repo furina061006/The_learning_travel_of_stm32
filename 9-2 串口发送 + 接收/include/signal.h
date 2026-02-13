@@ -16,7 +16,7 @@
 
 #ifndef __signal_h
 #define __signal_h
-#define __ARMCLIB_VERSION 5060034
+#define __ARMCLIB_VERSION 6070001
 
   #ifndef __SIGNAL_DECLS
   #define __SIGNAL_DECLS
