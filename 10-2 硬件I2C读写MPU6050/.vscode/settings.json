@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "stm32f10x.h": "c",
+        "countsensor.h": "c",
+        "core_cm3.h": "c",
+        "hardware.h": "c",
+        "pwm.h": "c",
+        "led.h": "c",
+        "stdio.h": "c",
+        "system.h": "c",
+        "stm32f10x_usart.h": "c",
+        "__functional_03": "c",
+        "functional": "c",
+        "string.h": "c"
+    }
+}
